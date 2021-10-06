@@ -25,3 +25,11 @@ The majority of hospitals could not offer me any of these services, which makes 
 very inconvenient since the clients do not know what to expect. Therefore, I have decided to make an application coming 
 up with the stated problems.
 
+## User Stories
+
+- As a user, I want to be able to see the whole schedule of the booked and eligible appointments
+- As a user, I want to book an appointment
+- As a user, I want to cancel my appointment
+- As a user, I want to be able to see the whole directory of the doctors working in this clinique
+- As a user, I want to be able to see the locations of this clinique
+- As a user, I want to see the price of the medical examination with the doctor I have chosen
