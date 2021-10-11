@@ -24,3 +24,5 @@ up with the stated problems.
 - As a user, I want to view information about particular task
 - As a user, I want to schedule new task
 - As a user, I want to delete task
+- As a user, I want to mark my task as done
+- As a user, I want to mark my task as undone
