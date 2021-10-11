@@ -18,4 +18,9 @@ remember. The majority of similar TODO applications do not have such option as s
 and time, or you are not able to view your tasks at a calendar. Therefore, I have decided to make an application coming
 up with the stated problems.
 
+## User Stories
 
+- As a user, I want to view the whole schedule of my tasks for a day
+- As a user, I want to view information about particular task
+- As a user, I want to schedule new task
+- As a user, I want to delete task
