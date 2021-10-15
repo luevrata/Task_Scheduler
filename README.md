@@ -20,9 +20,10 @@ up with the stated problems.
 
 ## User Stories
 
-- As a user, I want to view the whole schedule of my tasks for a day
+- As a user, I want to view the schedule of my tasks 
 - As a user, I want to view information about particular task
 - As a user, I want to schedule new task
 - As a user, I want to delete task
 - As a user, I want to mark my task as done
 - As a user, I want to mark my task as undone
+- As a user, I want to edit description, name, time, and date of existing task
