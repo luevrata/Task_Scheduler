@@ -1,9 +1,9 @@
 package model;
 
-//Represents a schedule which has a set of tasks
 import java.util.ArrayList;
 import java.util.Collections;
 
+//Represents a schedule which has a set of tasks
 public class Scheduler {
     private ArrayList<Task> allTasks;
 

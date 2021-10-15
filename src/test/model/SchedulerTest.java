@@ -13,16 +13,18 @@ class SchedulerTest {
     Task task1;
     Task task2;
     Task task3;
-    Calendar calendar;
+    Calendar.Builder calendarBuilder;
+    Calendar calendar1;
+    Calendar calendar2;
+    Calendar calendar3;
     ArrayList<Task> tasks;
 
     @BeforeEach
     void setUp() {
         schedule = new Scheduler();
-        calendar = Calendar.getInstance();
+        calendarBuilder = new Calendar.Builder();
 
         task1 = new Task();
-        task1.setDateTime(calendar);
         task2 = new Task();
         task3 = new Task();
 
@@ -36,9 +38,15 @@ class SchedulerTest {
 
     @Test
     void testAddTask() {
+        calendarBuilder.setDate(2003,7,16);
+        calendar1 = calendarBuilder.build();
+        calendarBuilder.setDate(2002,7,16);
+        calendar2 = calendarBuilder.build();
+        task1.setDateTime(calendar1);
+        task2.setDateTime(calendar2);
         schedule.addTask(task2);
         assertEquals(2, schedule.getAllTasks().size());
-        assertEquals(task2, schedule.getAllTasks().get(schedule.getAllTasks().size() - 1));
+        assertEquals(task2, schedule.getAllTasks().get(0));
     }
 
     @Test
@@ -65,10 +73,20 @@ class SchedulerTest {
 
     @Test
     void testSetAllTasks() {
+        calendarBuilder.setDate(2005,7,16);
+        calendar3 = calendarBuilder.build();
+        calendarBuilder.setDate(2003,7,16);
+        calendar1 = calendarBuilder.build();
+        calendarBuilder.setDate(2002,7,16);
+        calendar2 = calendarBuilder.build();
+
+        task1.setDateTime(calendar1);
+        task2.setDateTime(calendar2);
+        task3.setDateTime(calendar3);
         schedule.setAllTasks(tasks);
         assertEquals(3,schedule.getAllTasks().size());
-        assertEquals(task1, schedule.getAllTasks().get(0));
-        assertEquals(task2, schedule.getAllTasks().get(1));
+        assertEquals(task2, schedule.getAllTasks().get(0));
+        assertEquals(task1, schedule.getAllTasks().get(1));
         assertEquals(task3, schedule.getAllTasks().get(2));
     }
 }
