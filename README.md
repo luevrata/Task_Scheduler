@@ -27,3 +27,6 @@ up with the stated problems.
 - As a user, I want to mark my task as done
 - As a user, I want to mark my task as undone
 - As a user, I want to edit description, name, time, and date of existing task
+- As a user, I want to be able to save my schedule to a file 
+- As a user, I want to be able to load my schedule from a file
+
