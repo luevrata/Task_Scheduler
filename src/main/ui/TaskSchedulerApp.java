@@ -40,7 +40,7 @@ public class TaskSchedulerApp {
     //EFFECTS: initializes schedule
     private void init() {
         keepGoing = true;
-        schedule = new Scheduler();
+        schedule = new Scheduler("My Schedule");
         input = new Scanner(System.in);
         input.useDelimiter("\n");
     }

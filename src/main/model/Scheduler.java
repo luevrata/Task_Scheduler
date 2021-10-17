@@ -6,10 +6,20 @@ import java.util.Collections;
 //Represents a schedule which has a set of tasks
 public class Scheduler {
     private ArrayList<Task> allTasks;
+    private String name;
 
     //EFFECTS: declares a new empty array list
-    public Scheduler() {
+    public Scheduler(String name) {
+        this.name = name;
         allTasks = new ArrayList<>();
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     //MODIFIES: this

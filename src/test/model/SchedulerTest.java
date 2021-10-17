@@ -21,7 +21,7 @@ class SchedulerTest {
 
     @BeforeEach
     void setUp() {
-        schedule = new Scheduler();
+        schedule = new Scheduler("Someone's schedule");
         calendarBuilder = new Calendar.Builder();
 
         task1 = new Task();
@@ -88,5 +88,11 @@ class SchedulerTest {
         assertEquals(task2, schedule.getAllTasks().get(0));
         assertEquals(task1, schedule.getAllTasks().get(1));
         assertEquals(task3, schedule.getAllTasks().get(2));
+    }
+
+    @Test
+    void testSetName() {
+        schedule.setName("Another name");
+        assertEquals("Another name", schedule.getName());
     }
 }
