@@ -1,10 +1,13 @@
 package model;
 
+import org.json.JSONObject;
+import persistence.Writable;
+
 import java.util.Calendar;
 
 //Represents a task having a date, time, name, description, and DONE or UNDONE mark
 //Implements Comparable interface in order to be compared by date and time
-public class Task implements Comparable<Task> {
+public class Task implements Comparable<Task>, Writable {
     private Calendar dateTime;
     private String name;
     private String description;
@@ -73,5 +76,15 @@ public class Task implements Comparable<Task> {
     @Override
     public int compareTo(Task compareTask) {
         return this.dateTime.compareTo(compareTask.dateTime);
+    }
+
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("date and time", dateTime);
+        json.put("name", name);
+        json.put("description", description);
+        json.put("mark", mark);
+        return json;
     }
 }

@@ -1,6 +1,6 @@
 package ui;
 
-import model.Scheduler;
+import model.Schedule;
 import model.Task;
 
 import java.time.LocalDate;
@@ -12,7 +12,7 @@ import java.util.Scanner;
 
 //Task Scheduler Application
 public class TaskSchedulerApp {
-    private Scheduler schedule;
+    private Schedule schedule;
     private Scanner input;
     private boolean keepGoing;
     private int command;
@@ -40,7 +40,7 @@ public class TaskSchedulerApp {
     //EFFECTS: initializes schedule
     private void init() {
         keepGoing = true;
-        schedule = new Scheduler("My Schedule");
+        schedule = new Schedule("My Schedule");
         input = new Scanner(System.in);
         input.useDelimiter("\n");
     }

@@ -1,16 +1,20 @@
 package persistence;
 
-import model.Scheduler;
+import model.Schedule;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
+import java.util.Locale;
 import java.util.stream.Stream;
 
 
-// Represents a reader that reads workroom from JSON data stored in file
+// Represents a reader that reads schedule from JSON data stored in file
 public class JsonReader {
     private String source;
 
@@ -21,7 +25,7 @@ public class JsonReader {
 
     // EFFECTS: reads workroom from file and returns it;
     // throws IOException if an error occurs reading data from file
-    public Scheduler read() throws IOException {
+    public Schedule read() throws IOException {
         String jsonData = readFile(source);
         JSONObject jsonObject = new JSONObject(jsonData);
         return parseSchedule(jsonObject);
@@ -38,11 +42,29 @@ public class JsonReader {
         return contentBuilder.toString();
     }
 
-    // EFFECTS: parses scheduler from JSON object and returns it
-    private Scheduler parseSchedule(JSONObject jsonObject) {
+    // EFFECTS: parses schedule from JSON object and returns it
+    private Schedule parseSchedule(JSONObject jsonObject) {
         String name = jsonObject.getString("name");
-        Scheduler s = new Scheduler(name);
-        //addTasks(s, jsonObject);
+        Schedule s = new Schedule(name);
+        addTasks(s, jsonObject);
         return s;
+    }
+
+    // MODIFIES: s
+    // EFFECTS: parses allTasks from JSON object and adds them to Schedule
+    private void addTasks(Schedule s, JSONObject jsonObject) {
+        JSONArray jsonArray = jsonObject.getJSONArray("tasks");
+        for (Object json : jsonArray) {
+            JSONObject nextTask = (JSONObject) json;
+            addTask(s, nextTask);
+        }
+    }
+
+    // MODIFIES: s
+    // EFFECTS: parses task from JSON object and adds it to workroom
+    private void addTask(Schedule s, JSONObject jsonObject) {
+        Calendar calendar = jsonObject.getString("date and time");
+        String name = jsonObject.getString("name");
+
     }
 }

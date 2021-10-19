@@ -1,15 +1,19 @@
 package model;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+import persistence.Writable;
+
 import java.util.ArrayList;
 import java.util.Collections;
 
 //Represents a schedule which has a set of tasks
-public class Scheduler {
+public class Schedule implements Writable {
     private ArrayList<Task> allTasks;
     private String name;
 
     //EFFECTS: declares a new empty array list
-    public Scheduler(String name) {
+    public Schedule(String name) {
         this.name = name;
         allTasks = new ArrayList<>();
     }
@@ -57,5 +61,24 @@ public class Scheduler {
     public void setAllTasks(ArrayList<Task> tasks) {
         allTasks = tasks;
         Collections.sort(allTasks);
+    }
+
+    @Override
+    public JSONObject toJson() {
+        JSONObject json  = new JSONObject();
+        json.put("name", name);
+        json.put("tasks", tasksToJson());
+        return json;
+    }
+
+    // EFFECTS: returns tasks in this schedule as a JSON array
+    private JSONArray tasksToJson() {
+        JSONArray jsonArray = new JSONArray();
+
+        for (Task t : allTasks) {
+            jsonArray.put(t.toJson());
+        }
+
+        return jsonArray;
     }
 }

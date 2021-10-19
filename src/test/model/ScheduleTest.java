@@ -8,8 +8,8 @@ import java.util.Calendar;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class SchedulerTest {
-    Scheduler schedule;
+class ScheduleTest {
+    Schedule schedule;
     Task task1;
     Task task2;
     Task task3;
@@ -21,7 +21,7 @@ class SchedulerTest {
 
     @BeforeEach
     void setUp() {
-        schedule = new Scheduler("Someone's schedule");
+        schedule = new Schedule("Someone's schedule");
         calendarBuilder = new Calendar.Builder();
 
         task1 = new Task();
