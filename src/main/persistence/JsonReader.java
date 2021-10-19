@@ -1,6 +1,7 @@
 package persistence;
 
 import model.Schedule;
+import model.Task;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -8,6 +9,8 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Locale;
@@ -63,8 +66,18 @@ public class JsonReader {
     // MODIFIES: s
     // EFFECTS: parses task from JSON object and adds it to workroom
     private void addTask(Schedule s, JSONObject jsonObject) {
-        Calendar calendar = jsonObject.getString("date and time");
-        String name = jsonObject.getString("name");
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
+        try {
+            calendar.setTime(simpleDateFormat.parse(jsonObject.getString("date and time")));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        String name = jsonObject.getString("name");
+        String description = jsonObject.getString("description");
+        Boolean mark =  Boolean.parseBoolean(jsonObject.getString("mark"));
+        Task task = new Task(calendar, name, description, mark);
+        s.addTask(task);
     }
 }

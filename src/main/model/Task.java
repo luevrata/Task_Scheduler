@@ -1,5 +1,6 @@
 package model;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.json.JSONObject;
 import persistence.Writable;
 
@@ -31,6 +32,14 @@ public class Task implements Comparable<Task>, Writable {
         this.name = name;
         this.description = description;
         mark = false;
+    }
+
+    //REQUIRES: name has non-zero length
+    //EFFECTS: name of task is set to name, description of task is set to description, dateTime is set to dateTime,
+    //mark is set to mark
+    public Task(Calendar dateTime, String name, String description, Boolean mark) {
+        this(dateTime, name, description);
+        setMark(mark);
     }
 
     public void setDateTime(Calendar calendar) {

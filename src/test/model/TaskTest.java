@@ -13,22 +13,33 @@ public class TaskTest {
     Calendar calendar;
     String newName;
     String newDescription;
+    Boolean mark;
 
     @BeforeEach
     void setUp() {
         task = new Task();
         calendar = Calendar.getInstance();
+        mark = true;
         newName = "Do that";
         newDescription = "Do that properly";
     }
 
     @Test
-    void testConstructor() {
+    void testConstructorMarkIsSetToFalse() {
         task = new Task(calendar, newName, newDescription);
         assertEquals(calendar,task.getDateTime());
         assertEquals(newName, task.getName());
         assertEquals(newDescription,task.getDescription());
         assertFalse(task.getMark());
+    }
+
+    @Test
+    void testConstructorMarkIsSetByParameter() {
+        task = new Task(calendar, newName, newDescription, mark);
+        assertEquals(calendar,task.getDateTime());
+        assertEquals(newName, task.getName());
+        assertEquals(newDescription,task.getDescription());
+        assertTrue(task.getMark());
     }
 
     @Test
