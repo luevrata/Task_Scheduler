@@ -93,10 +93,11 @@ public class Task implements Comparable<Task>, Writable {
         JSONObject json = new JSONObject();
         SimpleDateFormat jsonCalendarFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String sendDateTime = jsonCalendarFormat.format(dateTime.getTime());
+        String sendMark = String.valueOf(mark);
         json.put("date and time", sendDateTime);
         json.put("name", name);
         json.put("description", description);
-        json.put("mark", mark);
+        json.put("mark", sendMark);
         return json;
     }
 }

@@ -81,4 +81,9 @@ public class Schedule implements Writable {
 
         return jsonArray;
     }
+
+    //EFFECTS: returns number of tasks in schedule
+    public int numTasks() {
+        return allTasks.size();
+    }
 }

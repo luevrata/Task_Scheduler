@@ -11,9 +11,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
-import java.util.Locale;
 import java.util.stream.Stream;
 
 
@@ -69,6 +67,7 @@ public class JsonReader {
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
+        //TODO
         try {
             calendar.setTime(simpleDateFormat.parse(jsonObject.getString("date and time")));
         } catch (ParseException e) {
