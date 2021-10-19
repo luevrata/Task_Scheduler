@@ -3,6 +3,7 @@ package model;
 import org.json.JSONObject;
 import persistence.Writable;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 //Represents a task having a date, time, name, description, and DONE or UNDONE mark
@@ -81,7 +82,9 @@ public class Task implements Comparable<Task>, Writable {
     @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
-        json.put("date and time", dateTime);
+        SimpleDateFormat jsonCalendarFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String sendDateTime = jsonCalendarFormat.format(dateTime.getTime());
+        json.put("date and time", sendDateTime);
         json.put("name", name);
         json.put("description", description);
         json.put("mark", mark);
