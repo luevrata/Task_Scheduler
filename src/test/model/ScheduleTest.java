@@ -95,4 +95,11 @@ class ScheduleTest {
         schedule.setName("Another name");
         assertEquals("Another name", schedule.getName());
     }
+
+    @Test
+    void testNumTasks() {
+        assertEquals(1, schedule.numTasks());
+        schedule.addTask(task2);
+        assertEquals(2, schedule.numTasks());
+    }
 }
