@@ -88,6 +88,7 @@ public class Task implements Comparable<Task>, Writable {
         return this.dateTime.compareTo(compareTask.dateTime);
     }
 
+    //TODO ask if these methods need to be tested (also in Schedule class)
     @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
