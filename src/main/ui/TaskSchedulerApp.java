@@ -2,7 +2,12 @@ package ui;
 
 import model.Schedule;
 import model.Task;
+import persistence.JsonReader;
+import persistence.JsonWriter;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
@@ -12,10 +17,13 @@ import java.util.Scanner;
 
 //Task Scheduler Application
 public class TaskSchedulerApp {
+    private static final String JSON_STORE = "./data/schedule.json";
     private Schedule schedule;
     private Scanner input;
     private boolean keepGoing;
     private int command;
+    private JsonWriter jsonWriter;
+    private JsonReader jsonReader;
 
     //EFFECTS: runs Task Scheduler Application
     public TaskSchedulerApp() {
@@ -33,7 +41,6 @@ public class TaskSchedulerApp {
             command = input.nextInt();
             processCommandMainMenu(command);
         }
-        init();
     }
 
     //MODIFIES: this
@@ -43,6 +50,8 @@ public class TaskSchedulerApp {
         schedule = new Schedule("My Schedule");
         input = new Scanner(System.in);
         input.useDelimiter("\n");
+        jsonWriter = new JsonWriter(JSON_STORE);
+        jsonReader = new JsonReader(JSON_STORE);
     }
 
     //MODIFIES: this
@@ -56,13 +65,10 @@ public class TaskSchedulerApp {
                 displaySchedule();
                 break;
             case 2:
-                addTask();
+                manageTasks();
                 break;
             case 3:
-                deleteTask();
-                break;
-            case 4:
-                editTask();
+                fileOptions();
                 break;
             default:
                 System.out.println("Selection is not valid...");
@@ -109,10 +115,48 @@ public class TaskSchedulerApp {
                 displayDoneSchedule();
                 break;
             case 4:
+                displayUndoneSchedule();
+                break;
+            default:
+                System.out.println("Selection is not valid...");
+        }
+    }
+
+    //MODIFIES: this
+    //EFFECTS: processes user command (choice in "Manage Tasks" menu)
+    private void processCommandManageTasks(Integer command) {
+        switch (command) {
+            case 0:
+                keepGoing = false;
+                break;
+            case 1:
+                addTask();
+                break;
+            case 2:
+                deleteTask();
+                break;
+            case 3:
                 findTask();
                 break;
-            case 5:
-                displayUndoneSchedule();
+            case 4:
+                editTask();
+                break;
+            default:
+                System.out.println("Selection is not valid...");
+        }
+    }
+
+    //EFFECTS: processes user command (choice in "File Options" menu)
+    private void processCommandFileOptions(Integer command) {
+        switch (command) {
+            case 0:
+                keepGoing = false;
+                break;
+            case 1:
+                saveSchedule();
+                break;
+            case 2:
+                loadSchedule();
                 break;
             default:
                 System.out.println("Selection is not valid...");
@@ -123,18 +167,20 @@ public class TaskSchedulerApp {
     private void displayMenu() {
         System.out.println("\nSelect option:");
         System.out.println("\t1 -> Display schedule");
-        System.out.println("\t2 -> Add Task");
-        System.out.println("\t3 -> Delete Task");
-        System.out.println("\t4 -> Find task");
-        System.out.println("\t5 -> Edit task");
+        System.out.println("\t2 -> Manage Tasks");
+        System.out.println("\t3 -> File Options");
         System.out.println("\t0 -> quit");
     }
 
+    //TODO display mark and calendar better
     //EFFECTS: displays information of a particular task
     private void displayTask(Task task) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String sendDateTime = simpleDateFormat.format(task.getDateTime().getTime());
+
         System.out.println("\nName: " + task.getName());
         System.out.println("Description: " + task.getDescription());
-        System.out.println("Date and time: " + task.getDateTime().getTime());
+        System.out.println("Date and time: " + sendDateTime);
         System.out.println("Done: " + task.getMark());
     }
 
@@ -155,6 +201,24 @@ public class TaskSchedulerApp {
         System.out.println("\t2 -> Display day schedule");
         System.out.println("\t3 -> Display DONE tasks");
         System.out.println("\t4 -> Display UNDONE tasks");
+        System.out.println("\t0 -> quit");
+    }
+
+    //EFFECTS: displays "Manage tasks" menu options
+    private void displayManageTasksMenu() {
+        System.out.println("\nSelect option:");
+        System.out.println("\t1 -> Add task");
+        System.out.println("\t2 -> Delete task");
+        System.out.println("\t3 -> Find task");
+        System.out.println("\t4 -> Edit task");
+        System.out.println("\t0 -> quit");
+    }
+
+    //EFFECTS: displays "File options" menu
+    private void displayFileOptionsMenu() {
+        System.out.println("\nSelect option:");
+        System.out.println("\t1 -> Save schedule to a file");
+        System.out.println("\t2 -> Load Schedule from a file");
         System.out.println("\t0 -> quit");
     }
 
@@ -279,12 +343,27 @@ public class TaskSchedulerApp {
         }
     }
 
+    //TODO describe method
+    //
+    private void fileOptions() {
+        displayFileOptionsMenu();
+        command = input.nextInt();
+        processCommandFileOptions(command);
+    }
 
     //EFFECTS: processes "Display Schedule" menu option
     private void displaySchedule() {
         displayScheduleMenu();
         command = input.nextInt();
         processCommandDisplaySchedule(command);
+    }
+
+    //MODIFIES: this
+    //EFFECTS: processes "Manage Tasks" menu option
+    private void manageTasks() {
+        displayManageTasksMenu();
+        command = input.nextInt();
+        processCommandManageTasks(command);
     }
 
     //MODIFIES: this
@@ -318,7 +397,6 @@ public class TaskSchedulerApp {
         } else {
             System.out.println("No task found");
         }
-
     }
 
     //displays all tasks, if there are no tasks, displays "empty message"
@@ -376,6 +454,31 @@ public class TaskSchedulerApp {
         }
         if (emptyFlag) {
             System.out.println("Schedule is empty");
+        }
+    }
+
+    //TODO cant catch exception (file is not created) create it later
+
+    // EFFECTS: saves the schedule to file
+    private void saveSchedule() {
+        try {
+            jsonWriter.open();
+            jsonWriter.write(schedule);
+            jsonWriter.close();
+            System.out.println("Saved " + schedule.getName() + " to " + JSON_STORE);
+        } catch (FileNotFoundException e) {
+            System.out.println("Unable to write to file: " + JSON_STORE);
+        }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: loads schedule from file
+    private void loadSchedule() {
+        try {
+            schedule = jsonReader.read();
+            System.out.println("Loaded " + schedule.getName() + " from " + JSON_STORE);
+        } catch (IOException e) {
+            System.out.println("Unable to read from file: " + JSON_STORE);
         }
     }
 }

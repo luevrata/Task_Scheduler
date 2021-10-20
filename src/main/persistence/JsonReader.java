@@ -67,7 +67,7 @@ public class JsonReader {
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-        //TODO
+        //TODO ask how these lines need to be tested
         try {
             calendar.setTime(simpleDateFormat.parse(jsonObject.getString("date and time")));
         } catch (ParseException e) {
