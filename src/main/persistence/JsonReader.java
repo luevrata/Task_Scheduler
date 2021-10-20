@@ -62,7 +62,7 @@ public class JsonReader {
     }
 
     // MODIFIES: s
-    // EFFECTS: parses task from JSON object and adds it to workroom
+    // EFFECTS: parses task from JSON object and adds it to schedule
     private void addTask(Schedule s, JSONObject jsonObject) {
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -73,6 +73,7 @@ public class JsonReader {
         } catch (ParseException e) {
             e.printStackTrace();
         }
+
         String name = jsonObject.getString("name");
         String description = jsonObject.getString("description");
         Boolean mark =  Boolean.parseBoolean(jsonObject.getString("mark"));

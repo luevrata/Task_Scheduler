@@ -63,6 +63,7 @@ public class Schedule implements Writable {
         Collections.sort(allTasks);
     }
 
+    //EFFECTS: returns schedule as a JSON object
     @Override
     public JSONObject toJson() {
         JSONObject json  = new JSONObject();
@@ -71,7 +72,7 @@ public class Schedule implements Writable {
         return json;
     }
 
-    // EFFECTS: returns tasks in this schedule as a JSON array
+    //EFFECTS: returns tasks in this schedule as a JSON array
     private JSONArray tasksToJson() {
         JSONArray jsonArray = new JSONArray();
 

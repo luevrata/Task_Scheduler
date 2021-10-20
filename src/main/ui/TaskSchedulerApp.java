@@ -21,7 +21,7 @@ public class TaskSchedulerApp {
     private Schedule schedule;
     private Scanner input;
     private boolean keepGoing;
-    private int command;
+    private String command;
     private JsonWriter jsonWriter;
     private JsonReader jsonReader;
 
@@ -38,7 +38,7 @@ public class TaskSchedulerApp {
 
         while (keepGoing) {
             displayMenu();
-            command = input.nextInt();
+            command = input.next();
             processCommandMainMenu(command);
         }
     }
@@ -56,18 +56,18 @@ public class TaskSchedulerApp {
 
     //MODIFIES: this
     //EFFECTS: processes user command (choice in main menu)
-    private void processCommandMainMenu(Integer command) {
+    private void processCommandMainMenu(String command) {
         switch (command) {
-            case 0:
+            case "0":
                 keepGoing = false;
                 break;
-            case 1:
+            case "1":
                 displaySchedule();
                 break;
-            case 2:
+            case "2":
                 manageTasks();
                 break;
-            case 3:
+            case "3":
                 fileOptions();
                 break;
             default:
@@ -77,21 +77,21 @@ public class TaskSchedulerApp {
 
     //MODIFIES: this
     //EFFECTS: processes user command (choice in "edit task" menu)
-    private void processCommandTaskMenu(Integer command, Task task) {
+    private void processCommandTaskMenu(String command, Task task) {
         switch (command) {
-            case 0:
+            case "0":
                 keepGoing = false;
                 break;
-            case 1:
+            case "1":
                 changeName(task);
                 break;
-            case 2:
+            case "2":
                 changeDescription(task);
                 break;
-            case 3:
+            case "3":
                 task.changeMark();
                 break;
-            case 4:
+            case "4":
                 changeCalendar(task);
             default:
                 System.out.println("Selection is not valid...");
@@ -100,21 +100,21 @@ public class TaskSchedulerApp {
 
     //MODIFIES: this
     //EFFECTS: processes user command (choice in "display schedule" menu)
-    private void processCommandDisplaySchedule(Integer command) {
+    private void processCommandDisplaySchedule(String command) {
         switch (command) {
-            case 0:
+            case "0":
                 keepGoing = false;
                 break;
-            case 1:
+            case "1":
                 displayWholeSchedule();
                 break;
-            case 2:
+            case "2":
                 displayDaySchedule(makeCalendarDate());
                 break;
-            case 3:
+            case "3":
                 displayDoneSchedule();
                 break;
-            case 4:
+            case "4":
                 displayUndoneSchedule();
                 break;
             default:
@@ -124,21 +124,21 @@ public class TaskSchedulerApp {
 
     //MODIFIES: this
     //EFFECTS: processes user command (choice in "Manage Tasks" menu)
-    private void processCommandManageTasks(Integer command) {
+    private void processCommandManageTasks(String command) {
         switch (command) {
-            case 0:
+            case "0":
                 keepGoing = false;
                 break;
-            case 1:
+            case "1":
                 addTask();
                 break;
-            case 2:
+            case "2":
                 deleteTask();
                 break;
-            case 3:
+            case "3":
                 findTask();
                 break;
-            case 4:
+            case "4":
                 editTask();
                 break;
             default:
@@ -147,15 +147,15 @@ public class TaskSchedulerApp {
     }
 
     //EFFECTS: processes user command (choice in "File Options" menu)
-    private void processCommandFileOptions(Integer command) {
+    private void processCommandFileOptions(String command) {
         switch (command) {
-            case 0:
+            case "0":
                 keepGoing = false;
                 break;
-            case 1:
+            case "1":
                 saveSchedule();
                 break;
-            case 2:
+            case "2":
                 loadSchedule();
                 break;
             default:
@@ -172,16 +172,20 @@ public class TaskSchedulerApp {
         System.out.println("\t0 -> quit");
     }
 
-    //TODO display mark and calendar better
     //EFFECTS: displays information of a particular task
     private void displayTask(Task task) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String sendDateTime = simpleDateFormat.format(task.getDateTime().getTime());
-
-        System.out.println("\nName: " + task.getName());
+        String sendMark;
+        if (task.getMark()) {
+            sendMark = "DONE";
+        } else {
+            sendMark = "UNDONE";
+        }
+        System.out.println("\nDate and time: " + sendDateTime);
+        System.out.println("Name: " + task.getName());
         System.out.println("Description: " + task.getDescription());
-        System.out.println("Date and time: " + sendDateTime);
-        System.out.println("Done: " + task.getMark());
+        System.out.println("Mark: " + sendMark);
     }
 
     //EFFECTS: displays "edit task" menu options
@@ -235,7 +239,7 @@ public class TaskSchedulerApp {
         date = LocalDate.parse(strDate, formatter);
 
         calendarBuilder = new Calendar.Builder();
-        calendarBuilder.setDate(date.getYear(), date.getMonthValue(), date.getDayOfMonth());
+        calendarBuilder.setDate(date.getYear(), date.getMonthValue() - 1, date.getDayOfMonth());
 
         return calendarBuilder;
     }
@@ -334,7 +338,7 @@ public class TaskSchedulerApp {
             displayTask(taskToEdit);
             displayEditTaskMenu();
 
-            command = input.nextInt();
+            command = input.next();
             processCommandTaskMenu(command, taskToEdit);
 
             System.out.println("\nChanges applied");
@@ -343,18 +347,18 @@ public class TaskSchedulerApp {
         }
     }
 
-    //TODO describe method
-    //
+    //MODIFIES: this
+    //EFFECTS: processes "File Options" menu option
     private void fileOptions() {
         displayFileOptionsMenu();
-        command = input.nextInt();
+        command = input.next();
         processCommandFileOptions(command);
     }
 
     //EFFECTS: processes "Display Schedule" menu option
     private void displaySchedule() {
         displayScheduleMenu();
-        command = input.nextInt();
+        command = input.next();
         processCommandDisplaySchedule(command);
     }
 
@@ -362,7 +366,7 @@ public class TaskSchedulerApp {
     //EFFECTS: processes "Manage Tasks" menu option
     private void manageTasks() {
         displayManageTasksMenu();
-        command = input.nextInt();
+        command = input.next();
         processCommandManageTasks(command);
     }
 
@@ -456,8 +460,6 @@ public class TaskSchedulerApp {
             System.out.println("Schedule is empty");
         }
     }
-
-    //TODO cant catch exception (file is not created) create it later
 
     // EFFECTS: saves the schedule to file
     private void saveSchedule() {
