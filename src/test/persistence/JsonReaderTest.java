@@ -5,6 +5,7 @@ import model.Task;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.Calendar;
 import java.util.List;
 
@@ -16,10 +17,12 @@ public class JsonReaderTest extends JsonTest{
     void testReaderNonExistentFile() {
         JsonReader reader = new JsonReader("./data/noSuchFile.json");
         try {
-            Schedule s = reader.read();
+            reader.read();
             fail("IOException expected");
         } catch (IOException e) {
             // pass
+        } catch (ParseException e) {
+            fail("The format of date in JSON object is not valid");
         }
     }
 
@@ -32,6 +35,8 @@ public class JsonReaderTest extends JsonTest{
             assertEquals(0, s.numTasks());
         } catch (IOException e) {
             fail("Couldn't read from file");
+        } catch (ParseException e) {
+            fail("The format of date in JSON object is not valid");
         }
     }
 
@@ -56,6 +61,21 @@ public class JsonReaderTest extends JsonTest{
             checkTask(calendar2, "bake", "tasty", false, tasks.get(0));
         } catch (IOException e) {
             fail("Couldn't read from file");
+        } catch (ParseException e) {
+            fail("The format of date in JSON object is not valid");
+        }
+    }
+
+    @Test
+    void testReaderAddTaskParseException() {
+        JsonReader reader = new JsonReader("./data/testReaderAddTaskParseException.json");
+        try {
+            reader.read();
+            fail("ParseException expected");
+        } catch (IOException e) {
+            fail("Caught IOException");
+        } catch (ParseException e) {
+            //pass
         }
     }
 }

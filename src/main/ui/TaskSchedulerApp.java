@@ -7,6 +7,7 @@ import persistence.JsonWriter;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -481,6 +482,8 @@ public class TaskSchedulerApp {
             System.out.println("Loaded " + schedule.getName() + " from " + JSON_STORE);
         } catch (IOException e) {
             System.out.println("Unable to read from file: " + JSON_STORE);
+        } catch (ParseException e) {
+            System.out.println("The format of date in JSON object is not valid");
         }
     }
 }

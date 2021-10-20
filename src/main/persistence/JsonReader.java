@@ -17,7 +17,7 @@ import java.util.stream.Stream;
 
 // Represents a reader that reads schedule from JSON data stored in file
 public class JsonReader {
-    private String source;
+    private final String source;
 
     // EFFECTS: constructs reader to read from source file
     public JsonReader(String source) {
@@ -26,7 +26,7 @@ public class JsonReader {
 
     // EFFECTS: reads workroom from file and returns it;
     // throws IOException if an error occurs reading data from file
-    public Schedule read() throws IOException {
+    public Schedule read() throws IOException, ParseException {
         String jsonData = readFile(source);
         JSONObject jsonObject = new JSONObject(jsonData);
         return parseSchedule(jsonObject);
@@ -37,14 +37,14 @@ public class JsonReader {
         StringBuilder contentBuilder = new StringBuilder();
 
         try (Stream<String> stream = Files.lines(Paths.get(source), StandardCharsets.UTF_8)) {
-            stream.forEach(s -> contentBuilder.append(s));
+            stream.forEach(contentBuilder::append);
         }
 
         return contentBuilder.toString();
     }
 
     // EFFECTS: parses schedule from JSON object and returns it
-    private Schedule parseSchedule(JSONObject jsonObject) {
+    private Schedule parseSchedule(JSONObject jsonObject) throws ParseException {
         String name = jsonObject.getString("name");
         Schedule s = new Schedule(name);
         addTasks(s, jsonObject);
@@ -53,7 +53,7 @@ public class JsonReader {
 
     // MODIFIES: s
     // EFFECTS: parses allTasks from JSON object and adds them to Schedule
-    private void addTasks(Schedule s, JSONObject jsonObject) {
+    private void addTasks(Schedule s, JSONObject jsonObject) throws ParseException {
         JSONArray jsonArray = jsonObject.getJSONArray("tasks");
         for (Object json : jsonArray) {
             JSONObject nextTask = (JSONObject) json;
@@ -63,16 +63,10 @@ public class JsonReader {
 
     // MODIFIES: s
     // EFFECTS: parses task from JSON object and adds it to schedule
-    private void addTask(Schedule s, JSONObject jsonObject) {
+    private void addTask(Schedule s, JSONObject jsonObject) throws ParseException {
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-        //TODO ask how these lines need to be tested
-        try {
-            calendar.setTime(simpleDateFormat.parse(jsonObject.getString("date and time")));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        calendar.setTime(simpleDateFormat.parse(jsonObject.getString("date and time")));
 
         String name = jsonObject.getString("name");
         String description = jsonObject.getString("description");

@@ -5,6 +5,7 @@ import model.Task;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.Calendar;
 import java.util.List;
 
@@ -16,7 +17,7 @@ public class JsonWriterTest extends JsonTest{
     @Test
     void testWriterInvalidFile() {
         try {
-            Schedule s = new Schedule("My schedule");
+            new Schedule("My schedule");
             JsonWriter writer = new JsonWriter("./data/my\0illegal:fileName.json");
             writer.open();
             fail("IOException was expected");
@@ -39,7 +40,9 @@ public class JsonWriterTest extends JsonTest{
             assertEquals("My schedule", s.getName());
             assertEquals(0, s.numTasks());
         } catch (IOException e) {
-            fail("Exception should not have been thrown");
+            fail("IOException should not have been thrown");
+        } catch (ParseException e) {
+            fail("ParseException should not have been thrown\"");
         }
     }
 
@@ -72,7 +75,9 @@ public class JsonWriterTest extends JsonTest{
             checkTask(calendar2, "bake", "tasty", false, tasks.get(0));
 
         } catch (IOException e) {
-            fail("Exception should not have been thrown");
+            fail("IOException should not have been thrown");
+        } catch (ParseException e) {
+            fail("ParseException should not have been thrown");
         }
     }
 }
