@@ -9,6 +9,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
@@ -37,11 +38,11 @@ public class TaskSchedulerApp {
 
         init();
 
-        while (keepGoing) {
-            displayMenu();
-            command = input.next();
-            processCommandMainMenu(command);
-        }
+//        while (keepGoing) {
+//            displayMenu();
+//            command = input.next();
+//            processCommandMainMenu(command);
+//        }
     }
 
     //MODIFIES: this
@@ -93,7 +94,8 @@ public class TaskSchedulerApp {
                 task.changeMark();
                 break;
             case "4":
-                changeCalendar(task);
+                // todo
+                // changeCalendar(task);
             default:
                 System.out.println("Selection is not valid...");
         }
@@ -110,7 +112,8 @@ public class TaskSchedulerApp {
                 displayWholeSchedule();
                 break;
             case "2":
-                displayDaySchedule(makeCalendarDate());
+                // todo
+                // displayDaySchedule(makeCalendarDate());
                 break;
             case "3":
                 displayDoneSchedule();
@@ -131,13 +134,15 @@ public class TaskSchedulerApp {
                 keepGoing = false;
                 break;
             case "1":
-                addTask();
+                //todo
+                //addTask();
                 break;
             case "2":
                 deleteTask();
                 break;
             case "3":
-                findTask();
+                //todo
+                //findTask();
                 break;
             case "4":
                 editTask();
@@ -229,48 +234,47 @@ public class TaskSchedulerApp {
 
     //REQUIRES: user input is in requested format and with existing date
     //EFFECTS: creates Calendar.Builder with a date from user input and returns it
-    private Calendar.Builder makeDate() {
+    private Calendar.Builder makeDate(String strDate) throws DateTimeException {
         LocalDate date;
         Calendar.Builder calendarBuilder;
-        String strDate;
 
-        System.out.println("Enter Date (DDMMYYYY): ");
-        strDate = input.next();
+        //todo
+        //System.out.println("Enter Date (DDMMYYYY): ");
+        //strDate = input.next();
+
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("ddMMyyyy", Locale.ENGLISH);
         date = LocalDate.parse(strDate, formatter);
-
         calendarBuilder = new Calendar.Builder();
         calendarBuilder.setDate(date.getYear(), date.getMonthValue() - 1, date.getDayOfMonth());
-
         return calendarBuilder;
+
     }
 
     //REQUIRES: user input is in requested format and with existing date
     //EFFECTS: creates a calendar with a date from user input and returns it
-    private Calendar makeCalendarDate() {
+    public Calendar makeCalendarDate(String strDate) throws DateTimeException {
         Calendar calendar;
-        calendar = makeDate().build();
+        calendar = makeDate(strDate).build();
         return calendar;
     }
 
     //REQUIRES: user input is in requested format and with existing date and time
     //EFFECTS: creates a calendar with a date and time from user input and returns it
-    private Calendar makeCalendarDateAndTime() {
-        int hours;
-        int minutes;
-
-        Calendar.Builder calendarBuilder = makeDate();
-        String strHours;
-        String strMinutes;
+    private Calendar makeCalendarDateAndTime(String strDate, String strHours, String strMinutes)
+            throws DateTimeException {
+        Calendar.Builder calendarBuilder = makeDate(strDate);
+//        String strHours;
+//        String strMinutes;
         Calendar calendar;
+//TODO DELETE
 
-        System.out.println("Enter hours (HH): ");
-        strHours = input.next();
-        hours = Integer.parseInt(strHours);
+//        System.out.println("Enter hours (HH): ");
+//        strHours = input.next();
+        int hours = Integer.parseInt(strHours);
 
-        System.out.println("Enter minutes (MM): ");
-        strMinutes = input.next();
-        minutes = Integer.parseInt(strMinutes);
+//        System.out.println("Enter minutes (MM): ");
+//        strMinutes = input.next();
+        int minutes = Integer.parseInt(strMinutes);
 
         calendarBuilder.setTimeOfDay(hours, minutes, 0);
 
@@ -279,8 +283,9 @@ public class TaskSchedulerApp {
     }
 
     //EFFECTS: creates a task from user input and returns it
-    private Task makeTask() {
-        return new Task(makeCalendarDateAndTime(), makeName(), makeDescription());
+    private Task makeTask(String name, String desc, String date, String hours, String minutes)
+            throws DateTimeException {
+        return new Task(makeCalendarDateAndTime(date, hours, minutes), name, desc);
     }
 
     //REQUIRES: newName has non-zero length
@@ -303,13 +308,15 @@ public class TaskSchedulerApp {
 
     //MODIFIES: this
     //EFFECTS: sets new dateTime from user input to a given task
-    private void changeCalendar(Task task) {
-        System.out.print("Enter new date and time: ");
-        task.setDateTime(makeCalendarDateAndTime());
-    }
+    //todo
+//    private void changeCalendar(Task task) {
+//        System.out.print("Enter new date and time: ");
+//        task.setDateTime(makeCalendarDateAndTime());
+//    }
 
     //REQUIRES: input.next() has non-zero length
     //EFFECTS: creates string name from user input and returns it
+    //todo do not need
     private String makeName() {
         System.out.println("Enter name: ");
         return input.next();
@@ -373,10 +380,14 @@ public class TaskSchedulerApp {
 
     //MODIFIES: this
     //EFFECTS: processes "Add Task" menu option
-    private void addTask() {
-        System.out.println("To add task enter the information below");
-        schedule.addTask(makeTask());
-        System.out.println("The task is added to the schedule");
+    public void addTask(String name, String desc, String date, String hours, String minutes) {
+        try {
+            schedule.addTask(makeTask(name, desc, date, hours, minutes));
+            System.out.println("The task is added to the schedule");
+        } catch (DateTimeException ex) {
+            System.out.println("Invalid date/time format");
+        }
+
     }
 
     //MODIFIES: this
@@ -394,9 +405,8 @@ public class TaskSchedulerApp {
     }
 
     //EFFECTS: processes "Find Task" menu option
-    private void findTask() {
-        System.out.println("\nEnter the name of the task you want to find");
-        Task taskToFind = schedule.findTask(makeName());
+    public void findTask(String name) {
+        Task taskToFind = schedule.findTask(name);
         if (taskToFind != null) {
             displayTask(taskToFind);
         } else {
@@ -405,8 +415,7 @@ public class TaskSchedulerApp {
     }
 
     //displays all tasks, if there are no tasks, displays "empty message"
-    private void displayWholeSchedule() {
-        System.out.println("\nWhole schedule");
+    public void displayWholeSchedule() {
         if (schedule.getAllTasks().size() == 0) {
             System.out.println("Schedule is empty");
         } else {
@@ -418,8 +427,7 @@ public class TaskSchedulerApp {
 
     //EFFECTS: displays all tasks which are arranged on a particular day, if there are no tasks on this day, displays
     // "empty message"
-    private void displayDaySchedule(Calendar calendar) {
-        System.out.println("\nDay schedule");
+    public void displayDaySchedule(Calendar calendar) {
         boolean emptyFlag = true;
         for (Task task : schedule.getAllTasks()) {
             if (isSameDate(calendar, task.getDateTime())) {
@@ -433,8 +441,7 @@ public class TaskSchedulerApp {
     }
 
     //EFFECTS: displays all done tasks, if there are no done tasks displays "empty" message
-    private void displayDoneSchedule() {
-        System.out.println("\nDONE schedule");
+    public void displayDoneSchedule() {
         boolean emptyFlag = true;
         for (Task task : schedule.getAllTasks()) {
             if (task.getMark()) {
@@ -448,8 +455,7 @@ public class TaskSchedulerApp {
     }
 
     //EFFECTS: displays all undone tasks, if there are no undone tasks displays "empty" message
-    private void displayUndoneSchedule() {
-        System.out.println("\nUNDONE schedule");
+    public void displayUndoneSchedule() {
         boolean emptyFlag = true;
         for (Task task : schedule.getAllTasks()) {
             if (!task.getMark()) {
