@@ -12,7 +12,7 @@ public class Schedule implements Writable {
     private ArrayList<Task> allTasks;
     private String name;
 
-    //EFFECTS: declares a new empty array list
+    //EFFECTS: declares a new empty array list of tasks, gives name to a schedule
     public Schedule(String name) {
         this.name = name;
         allTasks = new ArrayList<>();
