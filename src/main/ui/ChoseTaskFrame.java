@@ -1,5 +1,7 @@
 package ui;
 
+import model.Event;
+import model.EventLog;
 import model.Task;
 import output.CustomOutputStream;
 
@@ -7,16 +9,19 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.PrintStream;
 
 //Edit Task Processor frame
 public class ChoseTaskFrame extends JFrame implements ActionListener {
     private final MainFrame mainFrame;
     private final JFrame previousFrame;
-    private final JTextField nameTextField;
-    private final JButton choseButton;
-    private final JButton backButton;
-    private final JTextArea textArea;
+    private JTextField nameTextField;
+    private JButton choseButton;
+    private JButton backButton;
+    private JTextArea textArea;
+    private JPanel mainPanel;
 
 
     //MODIFIES: this
@@ -25,20 +30,27 @@ public class ChoseTaskFrame extends JFrame implements ActionListener {
         super("Chose Task");
         this.mainFrame = mainFrame;
         this.previousFrame = previousFrame;
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         setVisible(true);
-        JPanel mainPanel;
         add(mainPanel = new JPanel());
 
-        mainPanel.setLayout(new GridLayout(0,1));
-        mainPanel.add(new JLabel("Enter the name of the task you want to edit:"));
-        mainPanel.add(nameTextField = new JTextField());
-        mainPanel.add(choseButton = new JButton("Chose"));
-        mainPanel.add(textArea = new JTextArea());
-        mainPanel.add(backButton = new JButton("Task Manager"));
+        setUpMainPanel();
 
         choseButton.addActionListener(this);
         backButton.addActionListener(this);
+
+        addWindowListener(new WindowAdapter() {
+
+            @Override
+            public void windowClosing(WindowEvent e) {
+                System.setOut(mainFrame.getOldStream());
+                for (Event ev: EventLog.getInstance()) {
+                    System.out.println(ev.toString());
+                }
+                System.exit(0);
+            }
+        });
+
         pack();
     }
 
@@ -65,6 +77,19 @@ public class ChoseTaskFrame extends JFrame implements ActionListener {
             setVisible(false);
             previousFrame.setVisible(true);
         }
+
         pack();
+    }
+
+
+    //MODIFIES: this
+    //EFFECTS: sets up the layout of a main panel
+    private void setUpMainPanel() {
+        mainPanel.setLayout(new GridLayout(0,1));
+        mainPanel.add(new JLabel("Enter the name of the task you want to edit:"));
+        mainPanel.add(nameTextField = new JTextField());
+        mainPanel.add(choseButton = new JButton("Chose"));
+        mainPanel.add(textArea = new JTextArea());
+        mainPanel.add(backButton = new JButton("Task Manager"));
     }
 }

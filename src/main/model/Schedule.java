@@ -31,12 +31,14 @@ public class Schedule implements Writable {
     public void addTask(Task task) {
         allTasks.add(task);
         Collections.sort(allTasks);
+        EventLog.getInstance().logEvent(new Event("Task is added to the schedule."));
     }
 
     //MODIFIES: this
     //EFFECTS: deletes task from allTasks
     public void deleteTask(Task task) {
         allTasks.remove(task);
+        EventLog.getInstance().logEvent(new Event("Task is removed from the schedule."));
     }
 
     //EFFECTS: finds a task in the array by cname to existing tasks and returns the task from array that

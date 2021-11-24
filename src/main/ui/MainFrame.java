@@ -1,5 +1,7 @@
 package ui;
 
+import model.Event;
+import model.EventLog;
 import model.Schedule;
 import model.Task;
 import persistence.JsonReader;
@@ -9,8 +11,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.DateTimeException;
@@ -32,25 +37,44 @@ public class MainFrame extends JFrame implements ActionListener {
     private JButton taskManagerButton;
     private JButton fileOptionsButton;
     private JLabel imageLabel;
+    private PrintStream oldStream;
 
     //MODIFIES THIS
     //EFFECTS: sets up main menu layout
     public MainFrame() {
         super("Main Menu");
+        oldStream = System.out;
         init();
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         setVisible(true);
         add(mainPanel = new JPanel());
 
-        seyUpMainPanel();
+        setUpMainPanel();
         setUpIcon();
+
 
         scheduleButton.addActionListener(this);
         taskManagerButton.addActionListener(this);
         fileOptionsButton.addActionListener(this);
+
+        addWindowListener(new WindowAdapter() {
+
+            @Override
+            public void windowClosing(WindowEvent e) {
+                System.setOut(oldStream);
+                for (Event ev: EventLog.getInstance()) {
+                    System.out.println(ev.toString());
+                }
+                System.exit(0);
+            }
+        });
+
         pack();
     }
 
+    public PrintStream getOldStream() {
+        return oldStream;
+    }
 
     //EFFECTS: performs an action depending on button;
     @Override
@@ -77,7 +101,7 @@ public class MainFrame extends JFrame implements ActionListener {
 
     //MODIFIES: this
     //EFFECTS: sets up main panel layout
-    private void seyUpMainPanel() {
+    private void setUpMainPanel() {
         mainPanel.setLayout(new BorderLayout());
         mainPanel.add(scheduleButton = new JButton("Schedule"), BorderLayout.NORTH);
         mainPanel.add(taskManagerButton = new JButton("Task Manager"), BorderLayout.WEST);

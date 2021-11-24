@@ -30,3 +30,17 @@ up with the stated problems.
 - As a user, I want to be able to save my schedule to a file 
 - As a user, I want to be able to load my schedule from a file
 
+## Phase 4: Task 2
+
+Wed Nov 24 15:12:26 PST 2021\
+Task is added to the schedule.\
+Wed Nov 24 15:12:31 PST 2021\
+Task is added to the schedule.\
+Wed Nov 24 15:12:36 PST 2021\
+Task is added to the schedule.\
+Wed Nov 24 15:12:51 PST 2021\
+Task is removed from the schedule.\
+Wed Nov 24 15:13:01 PST 2021\
+Task is removed from the schedule.
+
+Process finished with exit code 0
