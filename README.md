@@ -44,3 +44,9 @@ Wed Nov 24 15:13:01 PST 2021\
 Task is removed from the schedule.
 
 Process finished with exit code 0
+
+## Phase 4: Task 3
+To improve my design I would create an interface which could be implemented by every frame. This interface would have 
+such methods as:
+- SetUpLayout
+- SetUpButtons
