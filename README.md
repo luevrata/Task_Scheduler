@@ -29,8 +29,7 @@ up with the stated problems.
 - As a user, I want to edit description, name, time, and date of existing task
 - As a user, I want to be able to save my schedule to a file 
 - As a user, I want to be able to load my schedule from a file
-
-## Phase 4: Task 2
+- 
 
 Wed Nov 24 15:12:26 PST 2021\
 Task is added to the schedule.\
@@ -42,11 +41,3 @@ Wed Nov 24 15:12:51 PST 2021\
 Task is removed from the schedule.\
 Wed Nov 24 15:13:01 PST 2021\
 Task is removed from the schedule.
-
-Process finished with exit code 0
-
-## Phase 4: Task 3
-To improve my design I would create an interface which could be implemented by every frame. This interface would have 
-such methods as:
-- SetUpLayout
-- SetUpButtons
